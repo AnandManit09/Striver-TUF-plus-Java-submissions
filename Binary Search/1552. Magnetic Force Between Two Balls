@@ -1,0 +1,35 @@
+class Solution {
+    public int maxDistance(int[] position, int m) {
+        Arrays.sort(position);
+        int n=position.length;
+        int maxi=position[n-1];
+        int mini=1;
+
+        int low=mini,high=maxi,ans=0;
+        while(low<=high){
+            int mid=(low+high)/2;
+            if(checkFeasibility(position,mid,m,n)){
+                low=mid+1;
+                ans=mid;
+            }else{
+                high=mid-1;
+            }
+
+        }
+        return ans;
+
+    }
+
+    private boolean checkFeasibility(int[] position, int mid, int m,int n){
+        int currCount=1;
+        int last=position[0];
+        for(int i=1;i<n;i++){
+            if(position[i]-last>=mid){
+                currCount+=1;
+                last=position[i];
+                if(currCount==m) return true;
+            }
+        }
+        return currCount>=m;
+    }
+}
