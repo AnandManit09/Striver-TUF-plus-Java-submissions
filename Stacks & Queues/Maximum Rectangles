@@ -1,0 +1,64 @@
+class Solution {
+    public int maximalAreaOfSubMatrixOfAll1(int[][] matrix) {
+        int n=matrix.length;
+        int m=matrix[0].length;
+        int[] currArr=new int[m];
+        int[] prevArr=new int[m];
+        int ans=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(matrix[i][j]==0) currArr[j]=0;
+                else{
+                    currArr[j]=prevArr[j]+matrix[i][j];
+                }
+            }
+            prevArr=currArr;
+            ans=Math.max(ans,largestRectangleArea(currArr));
+        }
+        return ans;
+    }
+    public int largestRectangleArea(int[] heights) {
+        int n=heights.length;
+        int[] nse=findNSE(heights);
+        int[] pse=getPSE(heights);
+
+        int ans=0;
+        for(int i=0;i<n;i++){
+            ans=Math.max(ans,(heights[i]*(nse[i]-(pse[i]+1))));
+        }
+        return ans;
+    }
+    private int[] findNSE(int[] heights){
+        int n=heights.length;
+        int[] ans=new int[n];
+        Stack<Integer> st=new Stack<>();
+        for(int i=n-1;i>=0;i--){
+            int curr=heights[i];
+
+            while(!st.isEmpty() && heights[st.peek()]>=curr)st.pop();
+
+            ans[i]=st.isEmpty()?n:st.peek();
+
+            st.push(i);
+
+        }
+        return ans;
+    }
+     private int[] getPSE(int[] arr){
+        int n=arr.length;
+
+        Stack<Integer> st=new Stack<>();
+        int[] ans=new int[n];
+
+        for(int i=0;i<n;i++){
+            int currEle=arr[i];
+            while(!st.isEmpty()&& arr[st.peek()]>currEle){
+                st.pop();
+            }
+            ans[i]=!st.isEmpty()?st.peek():-1;
+
+            st.push(i);
+        }
+        return ans;
+    }
+}
