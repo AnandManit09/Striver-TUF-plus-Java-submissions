@@ -1,0 +1,102 @@
+import java.util.*;
+
+class TreeNode {
+    int data;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int val) {
+        data = val;
+        left = null;
+        right = null;
+    }
+}
+
+// Tuple class to hold node, x-coordinate, and y-coordinate
+class Tuple {
+    TreeNode node;
+    int x;
+    int y;
+
+    Tuple(TreeNode node, int x, int y) {
+        this.node = node;
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class Solution {
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+
+        if (root == null) {
+            return result;
+        }
+
+        // TreeMap to store the nodes at each vertical distance
+        TreeMap<Integer, TreeMap<Integer, PriorityQueue<Integer>>> nodesMap = new TreeMap<>();
+
+        // Queue for BFS traversal (stores node along with its x and y coordinates)
+        Queue<Tuple> queue = new LinkedList<>();
+        queue.offer(new Tuple(root, 0, 0)); // (node, x, y)
+
+        // Perform BFS
+        while (!queue.isEmpty()) {
+            Tuple tuple = queue.poll();
+            TreeNode node = tuple.node;
+            int x = tuple.x;
+            int y = tuple.y;
+
+            // Add the node's value to the map at the correct x and y
+            nodesMap.putIfAbsent(x, new TreeMap<>());
+            nodesMap.get(x).putIfAbsent(y, new PriorityQueue<>());
+            nodesMap.get(x).get(y).offer(node.data);
+
+            // Add the left child with updated coordinates to the queue
+            if (node.left != null) {
+                queue.offer(new Tuple(node.left, x - 1, y + 1));
+            }
+
+            // Add the right child with updated coordinates to the queue
+            if (node.right != null) {
+                queue.offer(new Tuple(node.right, x + 1, y + 1));
+            }
+        }
+
+        // Prepare the result by sorting keys and compiling nodes
+        for (TreeMap<Integer, PriorityQueue<Integer>> yMap : nodesMap.values()) {
+            List<Integer> column = new ArrayList<>();
+            for (PriorityQueue<Integer> nodes : yMap.values()) {
+                while (!nodes.isEmpty()) {
+                    column.add(nodes.poll());
+                }
+            }
+            result.add(column);
+        }
+
+        return result;
+    }
+}
+
+// Main method to test the verticalTraversal function
+public class Main {
+    public static void main(String[] args) {
+        // Creating a binary tree
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+        root.right.left = new TreeNode(6);
+        root.right.right = new TreeNode(7);
+
+        // Creating an instance of Solution
+        Solution sol = new Solution();
+
+        // Getting the vertical order traversal
+        List<List<Integer>> result = sol.verticalTraversal(root);
+
+        // Printing the result
+        System.out.println("Vertical Order Traversal: " + result);
+    }
+}
