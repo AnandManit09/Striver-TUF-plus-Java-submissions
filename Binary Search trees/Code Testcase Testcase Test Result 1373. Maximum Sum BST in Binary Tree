@@ -1,0 +1,53 @@
+class Node{
+    int maxi;
+    int mini;
+    int sum;
+    public Node( int maxi, int mini, int sum){
+        this.maxi=maxi;
+        this.mini=mini;
+        this.sum=sum;
+    }
+ }
+class Solution {
+
+    int maxSumm=0;
+
+    public int maxSumBST(TreeNode root) {
+        Node temp= postOrder(root);
+        return maxSumm;
+    }
+    public Node postOrder(TreeNode root){
+        if(root==null){
+            return new Node(Integer.MIN_VALUE,Integer.MAX_VALUE,0);
+        }
+
+        Node leftVal=postOrder(root.left);
+        Node rightVal=postOrder(root.right);
+        Node returnNode;
+        // if It is a valid BST
+        if(root.val > leftVal.maxi && root.val < rightVal.mini){
+           
+            
+            returnNode= new Node(
+                Math.max(root.val,rightVal.maxi),
+                Math.min(leftVal.mini,root.val),
+                leftVal.sum+rightVal.sum+root.val
+            );
+            //System.out.println("root="+root.val+" leftVal maxsum="+leftVal.maxSum+" rightVal.maxsum="+rightVal.maxSum);
+           // System.out.println("MaxSUmm is "+maxSumm);
+            maxSumm=Math.max(maxSumm,returnNode.sum);
+        }else{
+            
+            returnNode= new Node(
+                Integer.MAX_VALUE,
+                Integer.MIN_VALUE,
+                0
+            );
+            maxSumm= Math.max(maxSumm,returnNode.sum);
+           // System.out.println("root="+root.val+" leftVal maxsum="+leftVal.maxSum+" rightVal.maxsum="+rightVal.maxSum);
+            //System.out.println("MaxSUmm is "+maxSumm);
+        }
+        return returnNode;
+
+    }
+}
