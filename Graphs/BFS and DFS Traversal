@@ -1,0 +1,47 @@
+class Solution {
+    public List<Integer> dfsOfGraph(int V, List<Integer> adj[]) {
+      boolean visited[]=new boolean[V];
+        List<Integer> ans=new ArrayList<>();
+        dfsHelper(V,adj,visited,ans,0);
+        return ans;
+    }
+    private void dfsHelper(int n, List<Integer> adj[], boolean[] visited, List<Integer> ans, int sv){
+        ans.add(sv);
+        visited[sv]=true;
+        for(int it:adj[sv]){
+            if(!visited[it]){
+                dfsHelper(n,adj,visited,ans,it);
+            }
+        }
+    }
+    
+    public List<Integer> bfsOfGraph(int V, List<Integer> adj[]) {
+        
+        boolean visited[]=new boolean[V];
+        List<Integer> ans=new ArrayList<>();
+
+        bfsHelper(V,adj,visited,ans,0);
+        return ans;
+    }
+    private void bfsHelper(int n, List<Integer> adj[], boolean[] visited, List<Integer> ans, int sv){
+
+        Queue<Integer> q=new LinkedList<>();
+        q.add(sv);
+        visited[sv]=true;
+
+        while(!q.isEmpty()){
+            int front=q.remove();
+            ans.add(front);
+            List<Integer> temp=adj[front];
+
+            for(int it:temp){
+                if(!visited[it]){
+                    q.add(it);
+                    visited[it]=true;
+                }
+            }
+        }
+        //return ans;
+    }
+}
+
