@@ -1,0 +1,42 @@
+class Solution {
+    public int findNumberOfComponent(int E, int V, List<List<Integer>> edges) {
+        return dfs(E,V,edges);
+    }
+    private int dfs(int m, int n, List<List<Integer>> edges){
+
+        if(m==0) return n;
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i <n ; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (List<Integer> edge : edges) {
+            adj.get(edge.get(0)).add(edge.get(1));
+            adj.get(edge.get(1)).add(edge.get(0));
+        }
+		boolean[] visited=new boolean[n];
+        int ans=0;
+        for(int j=0;j<adj.size();j++){
+            if(adj.get(j).size()==0) ans++;
+            for(int k:adj.get(j)){
+                if(!visited[k]){
+                    dfsHelper(adj,n,visited,k);
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+    private void dfsHelper(List<List<Integer>> adj, int n, boolean[] visited,int sv){
+
+        visited[sv]=true;
+
+        
+        for(int k:adj.get(sv)){
+            if(!visited[k]){
+                dfsHelper(adj,n,visited,k);
+            }
+        }
+        
+    }
+}
