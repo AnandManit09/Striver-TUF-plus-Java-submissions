@@ -1,0 +1,56 @@
+class Solution {
+    public boolean validPath(int n, int[][] edges, int source, int destination) {
+        
+        if(source==destination) return true;
+
+        int m=edges.length;
+        if(m==0) return true;
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (int[] edge : edges) {
+            adj.get(edge[0]).add(edge[1]);
+            adj.get(edge[1]).add(edge[0]);
+        }
+        //printAdj(adj);
+        boolean[] visited=new boolean[n];
+
+        return bfsHelper(adj,visited,source,destination);
+
+
+
+        //return true;
+
+    }
+    private boolean bfsHelper(List<List<Integer>> adj,boolean[] visited,int start, int target){
+
+        Queue<Integer> q=new LinkedList<>();
+        q.add(start);
+        visited[start]=true;
+        while(!q.isEmpty()){
+            int front=q.poll();
+            if(front==target) return true;
+            //visited[front]=true;
+            for(int i:adj.get(front)){
+                if (!visited[i]) {
+                    visited[i] = true;
+                    q.add(i);
+                }
+            }
+        }
+
+        return false;
+    }
+    private void printAdj(int[][] adj){
+
+        int n=adj.length;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                System.out.print(adj[i][j]+" ");
+            }
+            System.out.println();
+        }
+    }
+}
