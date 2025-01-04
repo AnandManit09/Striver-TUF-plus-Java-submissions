@@ -1,0 +1,35 @@
+class Solution {
+    public int numProvinces(int[][] adj) {
+        int n=adj.length;
+        boolean[] visited=new boolean[n];
+        int ans=0;
+        for(int j=0;j<n;j++){
+            int numOne=0;
+            for(int k=0;k<n;k++){
+                 if(adj[j][k]==1) numOne++;
+                if(j!=k && adj[j][k]==1 && !visited[k]){
+                    dfsHelper(adj,n,visited,k);
+                    ans++;
+                }
+                
+            }
+            if(numOne==1) ans++;
+        }
+        return ans;
+    }
+    private void dfsHelper(int[][] adj, int n, boolean[] visited,int sv){
+
+        visited[sv]=true;
+
+        boolean callMade=false;
+        for(int k=0;k<n;k++){
+            if(visited[k]) callMade=true;
+            if(sv!=k && adj[sv][k]==1 && !visited[k]){
+                dfsHelper(adj,n,visited,k);
+                callMade=true;
+            }
+        }
+        
+    }
+}
+
