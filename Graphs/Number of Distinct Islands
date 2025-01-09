@@ -1,0 +1,75 @@
+class Solution {
+    private int[] delRow = {-1, 0, 1, 0};
+    private int[] delCol = {0, -1, 0, 1};
+
+    /* Helper function to check if a 
+    cell is within boundaries */
+    private boolean isValid(int i, int j, 
+                            int n, int m) {
+                        
+        // Return false if cell is invalid
+        if(i < 0 || i >= n) return false;
+        if(j < 0 || j >= m) return false;
+        
+        // Return true if cell is valid
+        return true;
+    }
+    public int countDistinctIslands(int[][] grid) {
+      
+        int n=grid.length;
+        int m=grid[0].length;
+
+        //Set<List<int[]>> st = new HashSet<>();
+        Set<String> ans=new LinkedHashSet<>();
+       // List<int[]> paths=new ArrayList<>();
+
+        boolean[][] visited=new boolean[n][m];
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                
+
+                if(grid[i][j]==1 && !visited[i][j]){
+
+                    visited[i][j]=true;
+                    List<String> paths=new ArrayList<>();
+                    dfs(i,j,grid,visited,i,j,paths);
+                    ans.add(String.join(";",paths));
+                }
+            }
+        }
+        //printset(ans);
+        return ans.size();
+
+    }
+    private void dfs(int row,int col, int[][] grid, boolean[][] visited, int baseRow, int baseCol, List<String> paths){
+        
+        int n = grid.length;
+        int m = grid[0].length;
+        paths.add((row-baseRow)+","+(col-baseCol));
+
+        for(int i=0;i<4;i++){
+            int nrow=row+delRow[i];
+            int ncol=col+delCol[i];
+
+            if(isValid(nrow,ncol,n,m) && !visited[nrow][ncol] && grid[nrow][ncol]==1){
+                visited[nrow][ncol]=true;
+                dfs(nrow,ncol,grid,visited,baseRow,baseCol,paths);
+            }
+        }
+
+    }
+
+    public void printset(Set<List<int[]>> st){
+
+        for(List<int[]> lt:st){
+            for(int[] arr:lt){
+                for(int x:arr){
+                    System.out.print(x+" ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+        }
+    }
+}
