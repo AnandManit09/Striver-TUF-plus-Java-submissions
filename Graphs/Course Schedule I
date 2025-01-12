@@ -1,0 +1,49 @@
+class Solution {
+    public boolean canFinish(int N, int[][] arr) {
+        List<Integer>[] adj=new ArrayList[N];
+
+        for(int i=0;i<N;i++){
+            adj[i]=new ArrayList<>();
+        }
+
+        for(int i=0;i<arr.length;i++){
+            adj[arr[i][0]].add(arr[i][1]);
+        }
+
+        return !isCyclic(N,adj);
+    }
+
+    public boolean isCyclic(int N, List<Integer>[] adj) {
+      
+      boolean[] visited=new boolean[N];
+      boolean[] paths=new boolean[N];
+
+      for(int i=0;i<N;i++){
+        if(!visited[i]){
+            boolean ans=dfs(i,adj,visited,paths);
+            if(ans) return ans;
+        }
+      }
+      return false;
+    }
+
+    private boolean dfs(int node, List<Integer>[] adj, boolean[] visited, boolean[] paths){
+
+        visited[node]=true;
+        paths[node]=true;
+
+        for(int it:adj[node]){
+
+            if(paths[it]==true) return true;
+            if(!visited[it]){
+                
+                boolean temp=dfs(it,adj,visited,paths);
+                if(temp) return true;
+
+            }
+            
+        }
+        paths[node]=false;
+        return false;
+    }
+}
