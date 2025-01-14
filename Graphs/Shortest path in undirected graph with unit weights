@@ -1,0 +1,40 @@
+class Solution {
+    public int[] shortestPath(int[][] edges, int N, int M) {
+        boolean[] visited=new boolean[N];
+        Queue<Integer> q=new LinkedList<>();
+        List<Integer>[] adj=new ArrayList[N];
+        for(int i=0;i<N;i++){
+            adj[i]=new ArrayList<>();
+        }
+
+        for(int i=0;i<M;i++){
+            adj[edges[i][0]].add(edges[i][1]);
+            adj[edges[i][1]].add(edges[i][0]);
+        }
+
+        int[] dist=new int[N];
+        Arrays.fill(dist,Integer.MAX_VALUE);
+        dist[0]=0;
+
+        q.add(0);
+
+        while(!q.isEmpty()){
+            int node=q.remove();
+            visited[node]=true;            
+            for(int it:adj[node]){
+                
+                if((1+dist[node])<dist[it]){
+                    dist[it]=dist[node]+1;
+                    q.add(it);
+                }
+            }
+        }
+
+        for (int i = 0; i < N; i++) {
+            if (dist[i] == Integer.MAX_VALUE) 
+                dist[i] = -1;
+        }
+
+        return dist;
+    }
+}
